@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Premium Wheel Rims{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 fw-bold">
+                    <i class="fas fa-tachometer-alt me-2 text-primary"></i>Admin Dashboard
+                </h1>
+                <div>
+                    <span class="text-muted">Welcome, {{ session.admin_username }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold">{{ products|length }}</h4>
+                            <p class="mb-0">Total Products</p>
+                        </div>
+                        <i class="fas fa-tire fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold">{{ quotes|length }}</h4>
+                            <p class="mb-0">Total Quotes</p>
+                        </div>
+                        <i class="fas fa-quote-right fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold">{{ quotes|selectattr('status', 'equalto', 'pending')|list|length }}</h4>
+                            <p class="mb-0">Pending Quotes</p>
+                        </div>
+                        <i class="fas fa-clock fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold">{{ quotes|selectattr('status', 'equalto', 'completed')|list|length }}</h4>
+                            <p class="mb-0">Completed</p>
+                        </div>
+                        <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ url_for('admin_add_product') }}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-plus me-2"></i>Add New Product
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ url_for('admin_quotes') }}" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-eye me-2"></i>View All Quotes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Products -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-tire me-2"></i>Products Management</h5>
+                    <a href="{{ url_for('admin_add_product') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Add Product
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if products %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Bolt Pattern</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products[-10:] %}
+                                <tr>
+                                    <td>{{ product.id }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>${{ "%.2f"|format(product.price) }}</td>
+                                    <td>{{ product.bolt_pattern }}</td>
+                                    <td>{{ product.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('admin_delete_product', product_id=product.id) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Are you sure you want to delete this product?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-tire fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No products added yet.</p>
+                        <a href="{{ url_for('admin_add_product') }}" class="btn btn-primary">Add Your First Product</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Quotes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-quote-right me-2"></i>Recent Quote Requests</h5>
+                    <a href="{{ url_for('admin_quotes') }}" class="btn btn-success btn-sm">
+                        <i class="fas fa-eye me-1"></i>View All
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if quotes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Vehicle</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quote in quotes[-5:] %}
+                                <tr>
+                                    <td>{{ quote.id }}</td>
+                                    <td>{{ quote.first_name }} {{ quote.last_name }}</td>
+                                    <td>{{ quote.vehicle_year }} {{ quote.vehicle_make }} {{ quote.vehicle_model }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'warning' if quote.status == 'pending' else 'success' if quote.status == 'completed' else 'info' }}">
+                                            {{ quote.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ quote.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='contacted') }}" 
+                                               class="btn btn-outline-info">Mark Contacted</a>
+                                            <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='completed') }}" 
+                                               class="btn btn-outline-success">Complete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-quote-right fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No quote requests yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Premium Wheel Rims{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-lg-6">
+            <div class="product-detail-image mb-4">
+                <img src="{{ product.main_image }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
+            </div>
+        </div>
+        
+        <!-- Product Information -->
+        <div class="col-lg-6">
+            <div class="product-detail-info">
+                <h1 class="display-5 fw-bold mb-3">{{ product.name }}</h1>
+                <p class="h2 text-primary fw-bold mb-4">${{ "%.2f"|format(product.price) }}</p>
+                
+                <div class="product-description mb-4">
+                    <h5 class="fw-bold mb-3">Description</h5>
+                    <p class="text-muted">{{ product.description }}</p>
+                </div>
+                
+                <!-- Product Specifications -->
+                <div class="product-specs mb-4">
+                    <h5 class="fw-bold mb-3">Specifications</h5>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="spec-item mb-3">
+                                <strong>Bolt Pattern:</strong><br>
+                                <span class="text-muted">{{ product.bolt_pattern }}</span>
+                            </div>
+                            <div class="spec-item mb-3">
+                                <strong>Available Sizes:</strong><br>
+                                <span class="text-muted">{{ product.sizes|join(', ') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="spec-item mb-3">
+                                <strong>Available Widths:</strong><br>
+                                <span class="text-muted">{{ product.widths|join(', ') }}</span>
+                            </div>
+                            <div class="spec-item mb-3">
+                                <strong>Product ID:</strong><br>
+                                <span class="text-muted">#{{ product.id }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="product-actions">
+                    <a href="{{ url_for('quote_request', product_id=product.id) }}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-quote-right me-2"></i>Request Quote
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Products
+                    </a>
+                </div>
+                
+                <!-- Additional Info -->
+                <div class="additional-info mt-5">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Custom Fitting:</strong> Our expert team will ensure these wheels are compatible with your specific vehicle. Please provide accurate vehicle information when requesting a quote.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="row mt-5 pt-5 border-top">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">Product Features</h3>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Premium Quality Materials</span>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Precision Engineering</span>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Performance Tested</span>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Professional Installation Available</span>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Manufacturer Warranty</span>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                <span>Expert Support</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

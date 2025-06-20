@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 fw-bold">
+                    <i class="fas fa-plus-circle me-2 text-primary"></i>Add New Product
+                </h1>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+            
+            <!-- Form Card -->
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-tire me-2"></i>Product Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Basic Information -->
+                        <div class="section-header mb-4">
+                            <h6 class="fw-bold text-primary">
+                                <i class="fas fa-info-circle me-2"></i>Basic Information
+                            </h6>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id }}" class="form-label">{{ form.name.label.text }}</label>
+                            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="e.g., Forged Aluminum Racing Wheel") }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id }}" class="form-label">{{ form.description.label.text }}</label>
+                            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows="4", placeholder="Detailed description of the wheel including materials, design features, and performance benefits...") }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.price.id }}" class="form-label">{{ form.price.label.text }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else ""), placeholder="1299.99") }}
+                                {% if form.price.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.price.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Product Image -->
+                        <div class="section-header mb-4">
+                            <h6 class="fw-bold text-primary">
+                                <i class="fas fa-camera me-2"></i>Product Image
+                            </h6>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.main_image.id }}" class="form-label">{{ form.main_image.label.text }}</label>
+                            {{ form.main_image(class="form-control" + (" is-invalid" if form.main_image.errors else "")) }}
+                            {% if form.main_image.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.main_image.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Upload a high-quality image of the wheel. Supported formats: JPG, PNG, GIF (max 16MB)</div>
+                        </div>
+                        
+                        <!-- Specifications -->
+                        <div class="section-header mb-4">
+                            <h6 class="fw-bold text-primary">
+                                <i class="fas fa-cogs me-2"></i>Specifications
+                            </h6>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.bolt_pattern.id }}" class="form-label">{{ form.bolt_pattern.label.text }}</label>
+                            {{ form.bolt_pattern(class="form-control" + (" is-invalid" if form.bolt_pattern.errors else ""), placeholder="e.g., 5x114.3, 5x120, 6x139.7") }}
+                            {% if form.bolt_pattern.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.bolt_pattern.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Standard bolt pattern format (e.g., 5x114.3)</div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.sizes.id }}" class="form-label">{{ form.sizes.label.text }}</label>
+                                {{ form.sizes(class="form-control" + (" is-invalid" if form.sizes.errors else ""), placeholder="18x8.5, 19x9.5, 20x10.5") }}
+                                {% if form.sizes.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.sizes.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Comma-separated list of available sizes</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.widths.id }}" class="form-label">{{ form.widths.label.text }}</label>
+                                {{ form.widths(class="form-control" + (" is-invalid" if form.widths.errors else ""), placeholder='8.5", 9.5", 10.5"') }}
+                                {% if form.widths.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.widths.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Comma-separated list of available widths</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-flex justify-content-between pt-4 border-top">
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Add Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

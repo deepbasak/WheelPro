@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}Quote Requests - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 fw-bold">
+                    <i class="fas fa-quote-right me-2 text-primary"></i>Quote Requests
+                </h1>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Row -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h4 class="fw-bold">{{ quotes|length }}</h4>
+                    <p class="mb-0">Total Quotes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h4 class="fw-bold">{{ quotes|selectattr('status', 'equalto', 'pending')|list|length }}</h4>
+                    <p class="mb-0">Pending</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h4 class="fw-bold">{{ quotes|selectattr('status', 'equalto', 'contacted')|list|length }}</h4>
+                    <p class="mb-0">Contacted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h4 class="fw-bold">{{ quotes|selectattr('status', 'equalto', 'completed')|list|length }}</h4>
+                    <p class="mb-0">Completed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quotes Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">All Quote Requests</h5>
+                </div>
+                <div class="card-body">
+                    {% if quotes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Contact</th>
+                                    <th>Location</th>
+                                    <th>Vehicle</th>
+                                    <th>Product</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quote in quotes|reverse %}
+                                <tr>
+                                    <td><strong>#{{ quote.id }}</strong></td>
+                                    <td>
+                                        <div class="fw-bold">{{ quote.first_name }} {{ quote.last_name }}</div>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            <i class="fas fa-envelope me-1"></i>{{ quote.email }}<br>
+                                            <i class="fas fa-phone me-1"></i>{{ quote.phone }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ quote.city }}, {{ quote.state }}<br>
+                                            {{ quote.country }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ quote.vehicle_year }} {{ quote.vehicle_make }}</div>
+                                        <small class="text-muted">{{ quote.vehicle_model }}</small>
+                                    </td>
+                                    <td>
+                                        {% if quote.product_id %}
+                                            {% set product = data_store.get_product(quote.product_id) %}
+                                            {% if product %}
+                                                <small>{{ product.name }}</small>
+                                            {% else %}
+                                                <small class="text-muted">Product not found</small>
+                                            {% endif %}
+                                        {% else %}
+                                            <small class="text-muted">General inquiry</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'warning' if quote.status == 'pending' else 'info' if quote.status == 'contacted' else 'success' }}">
+                                            {{ quote.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>{{ quote.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#quoteModal{{ quote.id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            {% if quote.status == 'pending' %}
+                                            <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='contacted') }}" 
+                                               class="btn btn-outline-info btn-sm" title="Mark as Contacted">
+                                                <i class="fas fa-phone"></i>
+                                            </a>
+                                            {% endif %}
+                                            {% if quote.status != 'completed' %}
+                                            <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='completed') }}" 
+                                               class="btn btn-outline-success btn-sm" title="Mark as Completed">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Quote Detail Modal -->
+                                <div class="modal fade" id="quoteModal{{ quote.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Quote Request #{{ quote.id }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h6 class="fw-bold text-primary">Customer Information</h6>
+                                                        <p><strong>Name:</strong> {{ quote.first_name }} {{ quote.last_name }}</p>
+                                                        <p><strong>Email:</strong> {{ quote.email }}</p>
+                                                        <p><strong>Phone:</strong> {{ quote.phone }}</p>
+                                                        <p><strong>Location:</strong> {{ quote.city }}, {{ quote.state }}, {{ quote.country }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6 class="fw-bold text-primary">Vehicle Information</h6>
+                                                        <p><strong>Year:</strong> {{ quote.vehicle_year }}</p>
+                                                        <p><strong>Make:</strong> {{ quote.vehicle_make }}</p>
+                                                        <p><strong>Model:</strong> {{ quote.vehicle_model }}</p>
+                                                        <p><strong>Status:</strong> 
+                                                            <span class="badge bg-{{ 'warning' if quote.status == 'pending' else 'info' if quote.status == 'contacted' else 'success' }}">
+                                                                {{ quote.status.title() }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {% if quote.remarks %}
+                                                <div class="row mt-3">
+                                                    <div class="col-12">
+                                                        <h6 class="fw-bold text-primary">Customer Remarks</h6>
+                                                        <p class="border p-3 bg-light rounded">{{ quote.remarks }}</p>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                                <div class="row mt-3">
+                                                    <div class="col-12">
+                                                        <h6 class="fw-bold text-primary">Quote Details</h6>
+                                                        <p><strong>Submitted:</strong> {{ quote.created_at.strftime('%Y-%m-%d at %H:%M') }}</p>
+                                                        {% if quote.product_id %}
+                                                            {% set product = data_store.get_product(quote.product_id) %}
+                                                            {% if product %}
+                                                                <p><strong>Product:</strong> {{ product.name }}</p>
+                                                                <p><strong>Price:</strong> ${{ "%.2f"|format(product.price) }}</p>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                {% if quote.status == 'pending' %}
+                                                <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='contacted') }}" 
+                                                   class="btn btn-info">Mark as Contacted</a>
+                                                {% endif %}
+                                                {% if quote.status != 'completed' %}
+                                                <a href="{{ url_for('update_quote_status', quote_id=quote.id, status='completed') }}" 
+                                                   class="btn btn-success">Mark as Completed</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-quote-right fa-4x text-muted mb-4"></i>
+                        <h4 class="text-muted">No Quote Requests Yet</h4>
+                        <p class="text-muted">When customers request quotes, they will appear here.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Auto-refresh page every 30 seconds to check for new quotes
+setTimeout(function() {
+    window.location.reload();
+}, 30000);
+</script>
+{% endblock %}
