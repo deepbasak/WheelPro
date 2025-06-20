@@ -59,9 +59,11 @@ def admin_login():
     form = AdminLoginForm()
     
     if form.validate_on_submit():
-        if data_store.check_admin_credentials(form.username.data, form.password.data):
+        username = form.username.data or ""
+        password = form.password.data or ""
+        if data_store.check_admin_credentials(username, password):
             session['admin_logged_in'] = True
-            session['admin_username'] = form.username.data
+            session['admin_username'] = username
             flash('Logged in successfully!', 'success')
             return redirect(url_for('admin_dashboard'))
         else:
@@ -99,7 +101,7 @@ def admin_add_product():
     
     if form.validate_on_submit():
         # Handle file upload
-        main_image_url = 'https://via.placeholder.com/600x600/ccc/333?text=No+Image'
+        main_image_url = 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center'
         
         if form.main_image.data:
             file = form.main_image.data
@@ -114,8 +116,10 @@ def admin_add_product():
                 main_image_url = f"/static/uploads/{filename}"
         
         # Parse sizes and widths
-        sizes = [size.strip() for size in form.sizes.data.split(',') if size.strip()]
-        widths = [width.strip() for width in form.widths.data.split(',') if width.strip()]
+        sizes_data = form.sizes.data or ""
+        widths_data = form.widths.data or ""
+        sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
+        widths = [width.strip() for width in widths_data.split(',') if width.strip()]
         
         product_data = {
             'name': form.name.data,

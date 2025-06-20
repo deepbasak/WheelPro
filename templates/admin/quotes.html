@@ -103,12 +103,7 @@
                                     </td>
                                     <td>
                                         {% if quote.product_id %}
-                                            {% set product = data_store.get_product(quote.product_id) %}
-                                            {% if product %}
-                                                <small>{{ product.name }}</small>
-                                            {% else %}
-                                                <small class="text-muted">Product not found</small>
-                                            {% endif %}
+                                            <small>Product ID: {{ quote.product_id }}</small>
                                         {% else %}
                                             <small class="text-muted">General inquiry</small>
                                         {% endif %}
@@ -184,11 +179,7 @@
                                                         <h6 class="fw-bold text-primary">Quote Details</h6>
                                                         <p><strong>Submitted:</strong> {{ quote.created_at.strftime('%Y-%m-%d at %H:%M') }}</p>
                                                         {% if quote.product_id %}
-                                                            {% set product = data_store.get_product(quote.product_id) %}
-                                                            {% if product %}
-                                                                <p><strong>Product:</strong> {{ product.name }}</p>
-                                                                <p><strong>Price:</strong> ${{ "%.2f"|format(product.price) }}</p>
-                                                            {% endif %}
+                                                            <p><strong>Product ID:</strong> {{ quote.product_id }}</p>
                                                         {% endif %}
                                                     </div>
                                                 </div>

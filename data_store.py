@@ -30,7 +30,7 @@ class DataStore:
                 'sizes': ['18x8.5', '19x9.5', '20x10.5'],
                 'bolt_pattern': '5x114.3',
                 'widths': ['8.5"', '9.5"', '10.5"'],
-                'main_image': 'https://via.placeholder.com/600x600/333/fff?text=Forged+Wheel',
+                'main_image': 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center',
                 'additional_images': []
             },
             {
@@ -40,7 +40,7 @@ class DataStore:
                 'sizes': ['19x9.0', '20x10.0', '21x11.0'],
                 'bolt_pattern': '5x120',
                 'widths': ['9.0"', '10.0"', '11.0"'],
-                'main_image': 'https://via.placeholder.com/600x600/111/fff?text=Carbon+Fiber',
+                'main_image': 'https://images.unsplash.com/photo-1609096334421-5b4b9fdccce6?w=600&h=600&fit=crop&crop=center',
                 'additional_images': []
             },
             {
@@ -50,7 +50,7 @@ class DataStore:
                 'sizes': ['20x8.5', '22x9.0', '24x10.0'],
                 'bolt_pattern': '5x115',
                 'widths': ['8.5"', '9.0"', '10.0"'],
-                'main_image': 'https://via.placeholder.com/600x600/silver/333?text=Chrome+Luxury',
+                'main_image': 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=600&h=600&fit=crop&crop=center',
                 'additional_images': []
             }
         ]
