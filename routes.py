@@ -103,43 +103,47 @@ def admin_dashboard():
 def admin_add_product():
     form = ProductForm()
     
-    if form.validate_on_submit():
-        # Handle file upload
-        main_image_url = 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center'
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        description = request.form.get('description', '').strip()
+        price = request.form.get('price', '0')
+        bolt_pattern = request.form.get('bolt_pattern', '').strip()
+        sizes_data = request.form.get('sizes', '').strip()
+        widths_data = request.form.get('widths', '').strip()
         
-        if form.main_image.data:
-            file = form.main_image.data
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                # Add timestamp to filename to avoid conflicts
-                import time
-                timestamp = str(int(time.time()))
-                filename = f"{timestamp}_{filename}"
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(filepath)
-                main_image_url = f"/static/uploads/{filename}"
-        
-        # Parse sizes and widths
-        sizes_data = form.sizes.data or ""
-        widths_data = form.widths.data or ""
-        sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
-        widths = [width.strip() for width in widths_data.split(',') if width.strip()]
-        
-        product = Product(
-            name=form.name.data or "",
-            description=form.description.data or "",
-            price=form.price.data or 0.0,
-            main_image=main_image_url,
-            additional_images=[],
-            bolt_pattern=form.bolt_pattern.data or "",
-            sizes=sizes,
-            widths=widths
-        )
-        
-        db.session.add(product)
-        db.session.commit()
-        flash(f'Product "{product.name}" added successfully!', 'success')
-        return redirect(url_for('admin_dashboard'))
+        # Validate required fields
+        if name and description and price and bolt_pattern:
+            try:
+                price_float = float(price)
+                if price_float > 0:
+                    # Handle file upload
+                    main_image_url = 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center'
+                    
+                    # Parse sizes and widths
+                    sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
+                    widths = [width.strip() for width in widths_data.split(',') if width.strip()]
+                    
+                    product = Product(
+                        name=name,
+                        description=description,
+                        price=price_float,
+                        main_image=main_image_url,
+                        additional_images=[],
+                        bolt_pattern=bolt_pattern,
+                        sizes=sizes,
+                        widths=widths
+                    )
+                    
+                    db.session.add(product)
+                    db.session.commit()
+                    flash(f'Product "{product.name}" added successfully!', 'success')
+                    return redirect(url_for('admin_dashboard'))
+                else:
+                    flash('Price must be greater than 0.', 'error')
+            except ValueError:
+                flash('Invalid price format.', 'error')
+        else:
+            flash('Please fill in all required fields.', 'error')
     
     return render_template('admin/add_product.html', form=form)
 

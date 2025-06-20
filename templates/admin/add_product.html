@@ -22,8 +22,7 @@
                     <h5 class="mb-0"><i class="fas fa-tire me-2"></i>Product Information</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" novalidate>
-                        {{ form.hidden_tag() }}
+                    <form method="POST" enctype="multipart/form-data" action="/admin/add_product">
                         
                         <!-- Basic Information -->
                         <div class="section-header mb-4">
