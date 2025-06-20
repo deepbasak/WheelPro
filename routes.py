@@ -157,20 +157,40 @@ def admin_add_product():
                     
                     if uploaded_files and uploaded_files[0].filename != '':
                         import time
-                        for i, file in enumerate(uploaded_files):
-                            if file and file.filename and file.filename != '' and allowed_file(file.filename):
-                                filename = secure_filename(file.filename)
-                                # Add timestamp to avoid conflicts
-                                timestamp = str(int(time.time()))
-                                filename = f"{timestamp}_{i}_{filename}"
-                                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                                file.save(filepath)
-                                image_url = f"/static/uploads/{filename}"
-                                
-                                if i == 0:
-                                    main_image_url = image_url
-                                else:
-                                    additional_images.append(image_url)
+                        
+                        # Check if using Cloudinary or local storage
+                        if app.config.get('USE_CLOUDINARY', False):
+                            from cloud_storage import upload_file
+                            
+                            for i, file in enumerate(uploaded_files):
+                                if file and file.filename and file.filename != '' and allowed_file(file.filename):
+                                    # Upload to Cloudinary
+                                    folder = "wheelrpo/wheels"
+                                    upload_result = upload_file(file, folder=folder)
+                                    
+                                    if upload_result and 'secure_url' in upload_result:
+                                        image_url = upload_result['secure_url']
+                                        
+                                        if i == 0:
+                                            main_image_url = image_url
+                                        else:
+                                            additional_images.append(image_url)
+                        else:
+                            # Fallback to local storage
+                            for i, file in enumerate(uploaded_files):
+                                if file and file.filename and file.filename != '' and allowed_file(file.filename):
+                                    filename = secure_filename(file.filename)
+                                    # Add timestamp to avoid conflicts
+                                    timestamp = str(int(time.time()))
+                                    filename = f"{timestamp}_{i}_{filename}"
+                                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                                    file.save(filepath)
+                                    image_url = f"/static/uploads/{filename}"
+                                    
+                                    if i == 0:
+                                        main_image_url = image_url
+                                    else:
+                                        additional_images.append(image_url)
                     
                     # Parse sizes and widths
                     sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]

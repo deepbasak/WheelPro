@@ -45,6 +45,11 @@ heroku addons:create heroku-postgresql:mini
 ```bash
 # Set secret key for Flask sessions
 heroku config:set SESSION_SECRET="your-secure-random-string"
+
+# Set Cloudinary environment variables
+heroku config:set CLOUDINARY_CLOUD_NAME="your-cloud-name"
+heroku config:set CLOUDINARY_API_KEY="your-api-key"
+heroku config:set CLOUDINARY_API_SECRET="your-api-secret"
 ```
 
 ### 6. Deploy to Heroku
@@ -81,6 +86,38 @@ If you encounter issues:
 2. Ensure all required environment variables are set
 3. Verify your Procfile is correctly set up
 4. Make sure the PostgreSQL add-on is provisioned
+
+## Setting Up Cloudinary for File Storage
+
+This application uses Cloudinary for storing uploaded images to ensure they persist between Heroku dyno restarts.
+
+### 1. Create a Cloudinary Account
+
+1. Sign up for a free Cloudinary account at https://cloudinary.com/users/register/free
+2. After registration, go to your Cloudinary dashboard
+
+### 2. Get Your Cloudinary Credentials
+
+From your Cloudinary dashboard, note down the following:
+- Cloud Name
+- API Key
+- API Secret
+
+### 3. Configure Cloudinary in Heroku
+
+Set the Cloudinary environment variables in Heroku:
+
+```bash
+heroku config:set CLOUDINARY_CLOUD_NAME="your-cloud-name"
+heroku config:set CLOUDINARY_API_KEY="your-api-key"
+heroku config:set CLOUDINARY_API_SECRET="your-api-secret"
+```
+
+### 4. Verify Configuration
+
+After deployment, upload a test image and verify that it is being stored in Cloudinary by:
+1. Checking the Cloudinary dashboard for the uploaded image
+2. Confirming that the image URL starts with your Cloudinary domain
 
 ## Local Testing of Production Configuration
 
