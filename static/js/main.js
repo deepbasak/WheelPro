@@ -65,20 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto-refresh only for admin dashboard (not form pages)
-    if (window.location.pathname === '/admin/dashboard') {
-        window.refreshInterval = setInterval(function() {
-            // Only refresh if no modals are open and no forms are being filled
-            var openModals = document.querySelectorAll('.modal.show');
-            var activeInputs = document.querySelectorAll('input:focus, textarea:focus, select:focus');
-            var formElements = document.querySelectorAll('form');
-            
-            // Don't refresh if there are forms on the page or active inputs
-            if (openModals.length === 0 && activeInputs.length === 0 && formElements.length === 0) {
-                window.location.reload();
-            }
-        }, 60000);
-    }
+    // Removed auto-refresh functionality to prevent interruption of admin forms
 
     // Enhanced product card interactions
     var productCards = document.querySelectorAll('.product-card');

@@ -103,7 +103,19 @@
                                     </td>
                                     <td>
                                         {% if quote.product_id %}
-                                            <small>Product ID: {{ quote.product_id }}</small>
+                                            {% set product = products_dict.get(quote.product_id) %}
+                                            {% if product %}
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{ product.main_image }}" alt="{{ product.name }}" 
+                                                         class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    <div>
+                                                        <div class="fw-bold small">{{ product.name }}</div>
+                                                        <small class="text-muted">${{ "%.2f"|format(product.price) }}</small>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <small class="text-muted">Product ID: {{ quote.product_id }} (Deleted)</small>
+                                            {% endif %}
                                         {% else %}
                                             <small class="text-muted">General inquiry</small>
                                         {% endif %}

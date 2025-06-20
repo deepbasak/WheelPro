@@ -196,7 +196,9 @@ def admin_add_product():
 @admin_required
 def admin_quotes():
     quotes = Quote.query.all()
-    return render_template('admin/quotes.html', quotes=quotes)
+    products = Product.query.all()
+    products_dict = {product.id: product for product in products}
+    return render_template('admin/quotes.html', quotes=quotes, products_dict=products_dict)
 
 @app.route('/admin/quote/<int:quote_id>/status/<status>')
 @admin_required
