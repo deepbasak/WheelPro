@@ -29,6 +29,10 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+# Configure WTF settings
+app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_TIME_LIMIT'] = None
+
 # Initialize the database
 db.init_app(app)
 

@@ -50,20 +50,23 @@ def quote_request(product_id):
 # Admin routes
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    form = AdminLoginForm()
-    
-    if form.validate_on_submit():
-        username = form.username.data or ""
-        password = form.password.data or ""
-        admin = Admin.query.filter_by(username=username).first()
-        if admin and admin.check_password(password):
-            session['admin_logged_in'] = True
-            session['admin_username'] = username
-            flash('Logged in successfully!', 'success')
-            return redirect(url_for('admin_dashboard'))
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+        
+        if username and password:
+            admin = Admin.query.filter_by(username=username).first()
+            if admin and admin.check_password(password):
+                session['admin_logged_in'] = True
+                session['admin_username'] = username
+                flash('Logged in successfully!', 'success')
+                return redirect(url_for('admin_dashboard'))
+            else:
+                flash('Invalid username or password.', 'error')
         else:
-            flash('Invalid credentials.', 'error')
+            flash('Please enter both username and password.', 'error')
     
+    form = AdminLoginForm()
     return render_template('admin/login.html', form=form)
 
 @app.route('/admin/logout')
