@@ -1,9 +1,9 @@
 import os
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.utils import secure_filename
-from app import app
+from app import app, db
 from forms import QuoteRequestForm, AdminLoginForm, ProductForm
-from data_store import data_store
+from models import Product, Quote, Admin
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -11,43 +11,37 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    products = data_store.get_all_products()
+    products = Product.query.all()
     return render_template('index.html', products=products)
 
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
-    product = data_store.get_product(product_id)
-    if not product:
-        flash('Product not found.', 'error')
-        return redirect(url_for('index'))
+    product = Product.query.get_or_404(product_id)
     return render_template('product_detail.html', product=product)
 
 @app.route('/quote/<int:product_id>', methods=['GET', 'POST'])
 def quote_request(product_id):
-    product = data_store.get_product(product_id)
-    if not product:
-        flash('Product not found.', 'error')
-        return redirect(url_for('index'))
-    
+    product = Product.query.get_or_404(product_id)
     form = QuoteRequestForm()
     
     if form.validate_on_submit():
-        quote_data = {
-            'first_name': form.first_name.data,
-            'last_name': form.last_name.data,
-            'email': form.email.data,
-            'phone': form.phone.data,
-            'city': form.city.data,
-            'state': form.state.data,
-            'country': form.country.data,
-            'vehicle_make': form.vehicle_make.data,
-            'vehicle_year': int(form.vehicle_year.data),
-            'vehicle_model': form.vehicle_model.data,
-            'remarks': form.remarks.data,
-            'product_id': product_id
-        }
+        quote = Quote(
+            first_name=form.first_name.data or "",
+            last_name=form.last_name.data or "",
+            email=form.email.data or "",
+            phone=form.phone.data or "",
+            city=form.city.data or "",
+            state=form.state.data or "",
+            country=form.country.data or "",
+            vehicle_make=form.vehicle_make.data or "",
+            vehicle_year=int(form.vehicle_year.data or 2020),
+            vehicle_model=form.vehicle_model.data or "",
+            remarks=form.remarks.data or "",
+            product_id=product_id
+        )
         
-        quote = data_store.add_quote(quote_data)
+        db.session.add(quote)
+        db.session.commit()
         flash(f'Quote request submitted successfully! Reference ID: {quote.id}', 'success')
         return redirect(url_for('index'))
     
@@ -61,7 +55,8 @@ def admin_login():
     if form.validate_on_submit():
         username = form.username.data or ""
         password = form.password.data or ""
-        if data_store.check_admin_credentials(username, password):
+        admin = Admin.query.filter_by(username=username).first()
+        if admin and admin.check_password(password):
             session['admin_logged_in'] = True
             session['admin_username'] = username
             flash('Logged in successfully!', 'success')
@@ -90,8 +85,8 @@ def admin_required(f):
 @app.route('/admin/dashboard')
 @admin_required
 def admin_dashboard():
-    products = data_store.get_all_products()
-    quotes = data_store.get_all_quotes()
+    products = Product.query.all()
+    quotes = Quote.query.all()
     return render_template('admin/dashboard.html', products=products, quotes=quotes)
 
 @app.route('/admin/add_product', methods=['GET', 'POST'])
@@ -121,18 +116,19 @@ def admin_add_product():
         sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
         widths = [width.strip() for width in widths_data.split(',') if width.strip()]
         
-        product_data = {
-            'name': form.name.data,
-            'description': form.description.data,
-            'price': form.price.data,
-            'main_image': main_image_url,
-            'additional_images': [],
-            'bolt_pattern': form.bolt_pattern.data,
-            'sizes': sizes,
-            'widths': widths
-        }
+        product = Product(
+            name=form.name.data or "",
+            description=form.description.data or "",
+            price=form.price.data or 0.0,
+            main_image=main_image_url,
+            additional_images=[],
+            bolt_pattern=form.bolt_pattern.data or "",
+            sizes=sizes,
+            widths=widths
+        )
         
-        product = data_store.add_product(product_data)
+        db.session.add(product)
+        db.session.commit()
         flash(f'Product "{product.name}" added successfully!', 'success')
         return redirect(url_for('admin_dashboard'))
     
@@ -141,14 +137,17 @@ def admin_add_product():
 @app.route('/admin/quotes')
 @admin_required
 def admin_quotes():
-    quotes = data_store.get_all_quotes()
+    quotes = Quote.query.all()
     return render_template('admin/quotes.html', quotes=quotes)
 
 @app.route('/admin/quote/<int:quote_id>/status/<status>')
 @admin_required
 def update_quote_status(quote_id, status):
     if status in ['pending', 'contacted', 'completed']:
-        if data_store.update_quote_status(quote_id, status):
+        quote = Quote.query.get(quote_id)
+        if quote:
+            quote.status = status
+            db.session.commit()
             flash(f'Quote status updated to {status}.', 'success')
         else:
             flash('Quote not found.', 'error')
@@ -160,7 +159,10 @@ def update_quote_status(quote_id, status):
 @app.route('/admin/product/<int:product_id>/delete')
 @admin_required
 def admin_delete_product(product_id):
-    if data_store.delete_product(product_id):
+    product = Product.query.get(product_id)
+    if product:
+        db.session.delete(product)
+        db.session.commit()
         flash('Product deleted successfully.', 'success')
     else:
         flash('Product not found.', 'error')
