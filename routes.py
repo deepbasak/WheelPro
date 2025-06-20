@@ -257,6 +257,21 @@ def admin_delete_product(product_id):
     
     return redirect(url_for('admin_dashboard'))
 
+@app.route('/embed')
+def embed_options():
+    """Serve the embed options page"""
+    return app.send_static_file('embed_options.html')
+
+@app.route('/embed-code')
+def embed_code():
+    """Serve the simple embed code page"""
+    return app.send_static_file('embed_code.html')
+
+@app.route('/badge')
+def badge():
+    """Serve the badge code page"""
+    return app.send_static_file('wheel_badge.html')
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WheelPro Site Embed Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #1a365d;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c5282;
+            margin-top: 30px;
+        }
+        .embed-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+        }
+        .code-block {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .preview {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .option {
+            margin-bottom: 40px;
+        }
+        .copy-btn {
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background-color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+    <h1>WheelPro - Embed Options for Your Website</h1>
+    <p>Use any of these options to embed your WheelPro site on other websites, blogs, or platforms.</p>
+
+    <div class="option">
+        <h2>Option 1: Simple iFrame Embed</h2>
+        <p>This is the most straightforward way to embed your site. It creates a window with your entire site.</p>
+        
+        <div class="embed-container">
+            <div class="code-block">
+                &lt;iframe src="https://onyxforged.herokuapp.com" width="100%" height="600px" style="border: 1px solid #ddd; border-radius: 4px;" title="WheelPro - Premium Forged Wheels"&gt;&lt;/iframe&gt;
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('iframe-code')">Copy Code</button>
+            
+            <h3>Preview:</h3>
+            <div class="preview">
+                <iframe src="https://onyxforged.herokuapp.com" width="100%" height="600px" style="border: 1px solid #ddd; border-radius: 4px;" title="WheelPro - Premium Forged Wheels"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="option">
+        <h2>Option 2: Responsive iFrame Embed</h2>
+        <p>This embed will adjust to fit the available space on different screen sizes.</p>
+        
+        <div class="embed-container">
+            <div class="code-block">
+                &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"&gt;<br>
+                &nbsp;&nbsp;&lt;iframe src="https://onyxforged.herokuapp.com" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid #ddd; border-radius: 4px;" title="WheelPro - Premium Forged Wheels"&gt;&lt;/iframe&gt;<br>
+                &lt;/div&gt;
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('responsive-iframe-code')">Copy Code</button>
+        </div>
+    </div>
+
+    <div class="option">
+        <h2>Option 3: Products Preview Widget</h2>
+        <p>This code embeds a small widget that showcases your products with a link to your full site.</p>
+        
+        <div class="embed-container">
+            <div class="code-block">
+                &lt;div style="width: 100%; max-width: 400px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; font-family: Arial, sans-serif;"&gt;<br>
+                &nbsp;&nbsp;&lt;div style="background-color: #1a365d; color: white; padding: 15px; text-align: center;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3 style="margin: 0;"&gt;WheelPro Premium Wheels&lt;/h3&gt;<br>
+                &nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&lt;div style="padding: 15px; text-align: center;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Discover our collection of premium forged wheels&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="display: flex; justify-content: space-around; margin-bottom: 15px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=150&h=150&fit=crop&crop=center" alt="Forged Wheel" style="width: 30%; border-radius: 4px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1609096334421-5b4b9fdccce6?w=150&h=150&fit=crop&crop=center" alt="Carbon Fiber Wheel" style="width: 30%; border-radius: 4px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=150&h=150&fit=crop&crop=center" alt="Luxury Wheel" style="width: 30%; border-radius: 4px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="https://onyxforged.herokuapp.com" target="_blank" style="display: inline-block; background-color: #2c5282; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;"&gt;View All Products&lt;/a&gt;<br>
+                &nbsp;&nbsp;&lt;/div&gt;<br>
+                &lt;/div&gt;
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('widget-code')">Copy Code</button>
+        </div>
+    </div>
+
+    <div class="option">
+        <h2>Option 4: Product Carousel Widget</h2>
+        <p>This code embeds a carousel showcasing your products with buttons to navigate.</p>
+        
+        <div class="embed-container">
+            <div class="code-block">
+                &lt;div style="width: 100%; max-width: 600px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; font-family: Arial, sans-serif;"&gt;<br>
+                &nbsp;&nbsp;&lt;div style="background-color: #1a365d; color: white; padding: 15px; text-align: center;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3 style="margin: 0;"&gt;Featured Premium Wheels&lt;/h3&gt;<br>
+                &nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&lt;div style="padding: 15px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div id="wheel-carousel" style="position: relative; height: 350px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="carousel-item" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=220&fit=crop&crop=center" alt="Forged Aluminum Racing Wheel" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4 style="margin: 5px 0;"&gt;Forged Aluminum Racing Wheel&lt;/h4&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style="margin: 5px 0;"&gt;Starting at $1,299.99&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="carousel-item" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; opacity: 0;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1609096334421-5b4b9fdccce6?w=400&h=220&fit=crop&crop=center" alt="Carbon Fiber Sport Rim" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4 style="margin: 5px 0;"&gt;Carbon Fiber Sport Rim&lt;/h4&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style="margin: 5px 0;"&gt;Starting at $2,499.99&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="carousel-item" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; opacity: 0;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=400&h=220&fit=crop&crop=center" alt="Chrome Luxury Wheel" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4 style="margin: 5px 0;"&gt;Chrome Luxury Wheel&lt;/h4&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style="margin: 5px 0;"&gt;Starting at $899.99&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="position: absolute; bottom: 10px; width: 100%; text-align: center;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="moveCarousel(-1)" style="background-color: #2c5282; color: white; border: none; padding: 8px 15px; border-radius: 4px; margin: 0 5px; cursor: pointer;"&gt;Prev&lt;/button&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="moveCarousel(1)" style="background-color: #2c5282; color: white; border: none; padding: 8px 15px; border-radius: 4px; margin: 0 5px; cursor: pointer;"&gt;Next&lt;/button&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="text-align: center; margin-top: 15px;"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="https://onyxforged.herokuapp.com" target="_blank" style="display: inline-block; background-color: #1a365d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;"&gt;Explore All Wheels&lt;/a&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&lt;/div&gt;<br>
+                &lt;/div&gt;<br>
+                <br>
+                &lt;script&gt;<br>
+                let currentIndex = 0;<br>
+                const items = document.querySelectorAll('.carousel-item');<br>
+                <br>
+                function moveCarousel(direction) {<br>
+                &nbsp;&nbsp;items[currentIndex].style.opacity = 0;<br>
+                &nbsp;&nbsp;currentIndex = (currentIndex + direction + items.length) % items.length;<br>
+                &nbsp;&nbsp;items[currentIndex].style.opacity = 1;<br>
+                }<br>
+                <br>
+                // Auto-rotate every 5 seconds<br>
+                setInterval(() => moveCarousel(1), 5000);<br>
+                &lt;/script&gt;
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('carousel-code')">Copy Code</button>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const codeBlock = document.querySelector('.code-block');
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeBlock.innerText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+
+        // Hidden elements to make copy buttons work
+        document.body.innerHTML += '<textarea id="iframe-code" style="display:none">' + document.querySelector('.option:nth-child(1) .code-block').innerText + '</textarea>';
+        document.body.innerHTML += '<textarea id="responsive-iframe-code" style="display:none">' + document.querySelector('.option:nth-child(2) .code-block').innerText + '</textarea>';
+        document.body.innerHTML += '<textarea id="widget-code" style="display:none">' + document.querySelector('.option:nth-child(3) .code-block').innerText + '</textarea>';
+        document.body.innerHTML += '<textarea id="carousel-code" style="display:none">' + document.querySelector('.option:nth-child(4) .code-block').innerText + '</textarea>';
+    </script>
+</body>
+</html>
