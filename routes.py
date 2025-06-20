@@ -24,26 +24,50 @@ def quote_request(product_id):
     product = Product.query.get_or_404(product_id)
     form = QuoteRequestForm()
     
-    if form.validate_on_submit():
-        quote = Quote(
-            first_name=form.first_name.data or "",
-            last_name=form.last_name.data or "",
-            email=form.email.data or "",
-            phone=form.phone.data or "",
-            city=form.city.data or "",
-            state=form.state.data or "",
-            country=form.country.data or "",
-            vehicle_make=form.vehicle_make.data or "",
-            vehicle_year=int(form.vehicle_year.data or 2020),
-            vehicle_model=form.vehicle_model.data or "",
-            remarks=form.remarks.data or "",
-            product_id=product_id
-        )
+    if request.method == 'POST':
+        # Get form data directly from request
+        first_name = request.form.get('first_name', '').strip()
+        last_name = request.form.get('last_name', '').strip()
+        email = request.form.get('email', '').strip()
+        phone = request.form.get('phone', '').strip()
+        city = request.form.get('city', '').strip()
+        state = request.form.get('state', '').strip()
+        country = request.form.get('country', '').strip()
+        vehicle_make = request.form.get('vehicle_make', '').strip()
+        vehicle_year = request.form.get('vehicle_year', '').strip()
+        vehicle_model = request.form.get('vehicle_model', '').strip()
+        remarks = request.form.get('remarks', '').strip()
         
-        db.session.add(quote)
-        db.session.commit()
-        flash(f'Quote request submitted successfully! Reference ID: {quote.id}', 'success')
-        return redirect(url_for('index'))
+        # Basic validation
+        if first_name and last_name and email and phone and city and state and country and vehicle_make and vehicle_year and vehicle_model:
+            try:
+                year_int = int(vehicle_year)
+                if 1900 <= year_int <= 2030:
+                    quote = Quote(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        phone=phone,
+                        city=city,
+                        state=state,
+                        country=country,
+                        vehicle_make=vehicle_make,
+                        vehicle_year=year_int,
+                        vehicle_model=vehicle_model,
+                        remarks=remarks,
+                        product_id=product_id
+                    )
+                    
+                    db.session.add(quote)
+                    db.session.commit()
+                    flash(f'Quote request submitted successfully! Reference ID: {quote.id}', 'success')
+                    return redirect(url_for('index'))
+                else:
+                    flash('Please enter a valid vehicle year (1900-2030).', 'error')
+            except ValueError:
+                flash('Please enter a valid vehicle year.', 'error')
+        else:
+            flash('Please fill in all required fields.', 'error')
     
     return render_template('quote_request.html', form=form, product=product)
 

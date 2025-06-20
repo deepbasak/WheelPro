@@ -177,29 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Loading states for buttons - but not for admin login
-    var submitButtons = document.querySelectorAll('button[type="submit"]:not(.admin-login-btn)');
-    submitButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            var form = this.closest('form');
-            if (form && form.checkValidity()) {
-                // Clear any auto-refresh intervals during form submission
-                if (window.refreshInterval) {
-                    clearInterval(window.refreshInterval);
-                }
-                
-                var originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-                this.disabled = true;
-                
-                // Reset button after 10 seconds as fallback
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.disabled = false;
-                }, 10000);
-            }
-        });
-    });
+    // Disable loading states for form buttons to prevent processing issues
+    // Forms will handle their own submission feedback
 
     // Confirmation dialogs for delete actions
     var deleteLinks = document.querySelectorAll('a[href*="delete"]');

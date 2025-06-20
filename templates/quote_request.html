@@ -30,8 +30,7 @@
                 <div class="card-body">
                     <p class="text-muted mb-4">Please fill out the form below to request a personalized quote for this product. Our team will contact you within 24 hours.</p>
                     
-                    <form method="POST" novalidate>
-                        {{ form.hidden_tag() }}
+                    <form method="POST" action="/quote/{{ product.id }}">
                         
                         <!-- Customer Information -->
                         <div class="section-header mb-4">
