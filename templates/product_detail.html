@@ -5,10 +5,37 @@
 {% block content %}
 <div class="container py-5">
     <div class="row">
-        <!-- Product Image -->
+        <!-- Product Images -->
         <div class="col-lg-6">
-            <div class="product-detail-image mb-4">
-                <img src="{{ product.main_image }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
+            <div class="product-detail-images mb-4">
+                <!-- Main Image -->
+                <div class="main-image mb-3">
+                    <img id="mainImage" src="{{ product.main_image }}" alt="{{ product.name }}" class="img-fluid rounded shadow w-100">
+                </div>
+                
+                <!-- Additional Images Thumbnails -->
+                {% if product.additional_images %}
+                <div class="additional-images">
+                    <div class="row g-2">
+                        <!-- Main image thumbnail -->
+                        <div class="col-3">
+                            <img src="{{ product.main_image }}" alt="{{ product.name }}" 
+                                 class="img-fluid rounded border thumbnail-image active" 
+                                 onclick="changeMainImage('{{ product.main_image }}')"
+                                 style="cursor: pointer; height: 80px; width: 100%; object-fit: cover;">
+                        </div>
+                        <!-- Additional image thumbnails -->
+                        {% for image in product.additional_images %}
+                        <div class="col-3">
+                            <img src="{{ image }}" alt="{{ product.name }}" 
+                                 class="img-fluid rounded border thumbnail-image" 
+                                 onclick="changeMainImage('{{ image }}')"
+                                 style="cursor: pointer; height: 80px; width: 100%; object-fit: cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
         
@@ -114,4 +141,36 @@
         </div>
     </div>
 </div>
+
+<script>
+function changeMainImage(imageSrc) {
+    document.getElementById('mainImage').src = imageSrc;
+    
+    // Update active thumbnail
+    document.querySelectorAll('.thumbnail-image').forEach(img => {
+        img.classList.remove('active');
+        if (img.src.endsWith(imageSrc.split('/').pop())) {
+            img.classList.add('active');
+        }
+    });
+}
+</script>
+
+<style>
+.thumbnail-image {
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.thumbnail-image:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.thumbnail-image.active {
+    opacity: 1;
+    border-color: #007bff !important;
+    border-width: 2px !important;
+}
+</style>
 {% endblock %}

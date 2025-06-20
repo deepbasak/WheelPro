@@ -72,14 +72,9 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label for="{{ form.main_image.id }}" class="form-label">{{ form.main_image.label.text }}</label>
-                            {{ form.main_image(class="form-control" + (" is-invalid" if form.main_image.errors else "")) }}
-                            {% if form.main_image.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.main_image.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="form-text">Upload a high-quality image of the wheel. Supported formats: JPG, PNG, GIF (max 16MB)</div>
+                            <label for="main_image" class="form-label">Product Images</label>
+                            <input type="file" class="form-control" id="main_image" name="main_image" accept="image/*" multiple>
+                            <div class="form-text">Upload high-quality images of the wheel. You can select multiple images. Supported formats: JPG, PNG, GIF (max 16MB each)</div>
                         </div>
                         
                         <!-- Specifications -->

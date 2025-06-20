@@ -140,8 +140,29 @@ def admin_add_product():
             try:
                 price_float = float(price)
                 if price_float > 0:
-                    # Handle file upload - use local SVG image
+                    # Handle file upload
                     main_image_url = '/static/images/wheel-placeholder.svg'
+                    
+                    # Handle multiple file uploads
+                    uploaded_files = request.files.getlist('main_image')
+                    additional_images = []
+                    
+                    if uploaded_files and uploaded_files[0].filename != '':
+                        import time
+                        for i, file in enumerate(uploaded_files):
+                            if file and file.filename and file.filename != '' and allowed_file(file.filename):
+                                filename = secure_filename(file.filename)
+                                # Add timestamp to avoid conflicts
+                                timestamp = str(int(time.time()))
+                                filename = f"{timestamp}_{i}_{filename}"
+                                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                                file.save(filepath)
+                                image_url = f"/static/uploads/{filename}"
+                                
+                                if i == 0:
+                                    main_image_url = image_url
+                                else:
+                                    additional_images.append(image_url)
                     
                     # Parse sizes and widths
                     sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
@@ -152,7 +173,7 @@ def admin_add_product():
                         description=description,
                         price=price_float,
                         main_image=main_image_url,
-                        additional_images=[],
+                        additional_images=additional_images,
                         bolt_pattern=bolt_pattern,
                         sizes=sizes,
                         widths=widths
