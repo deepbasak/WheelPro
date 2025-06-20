@@ -15,11 +15,16 @@ VEHICLE_YEARS = list(range(1990, 2026))  # 1990 to 2025
 def initialize_sample_data():
     """Initialize sample data if database is empty"""
     # Check if admin exists
-    admin = Admin.query.filter_by(username='admin').first()
+    admin = Admin.query.filter_by(username='takhar').first()
     if not admin:
+        # Remove old admin if exists
+        old_admin = Admin.query.filter_by(username='admin').first()
+        if old_admin:
+            db.session.delete(old_admin)
+        
         admin = Admin()
-        admin.username = 'admin'
-        admin.set_password('admin123')
+        admin.username = 'takhar'
+        admin.set_password('Takhar@Rim@0069')
         db.session.add(admin)
     
     # Check if products exist
