@@ -65,15 +65,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto-refresh for admin pages (every 30 seconds)
-    if (window.location.pathname.includes('/admin/')) {
-        var refreshInterval = setInterval(function() {
-            // Only refresh if no modals are open
+    // Auto-refresh only for admin dashboard (not form pages)
+    if (window.location.pathname === '/admin/dashboard') {
+        window.refreshInterval = setInterval(function() {
+            // Only refresh if no modals are open and no forms are being filled
             var openModals = document.querySelectorAll('.modal.show');
-            if (openModals.length === 0) {
+            var activeInputs = document.querySelectorAll('input:focus, textarea:focus, select:focus');
+            var formElements = document.querySelectorAll('form');
+            
+            // Don't refresh if there are forms on the page or active inputs
+            if (openModals.length === 0 && activeInputs.length === 0 && formElements.length === 0) {
                 window.location.reload();
             }
-        }, 30000);
+        }, 60000);
     }
 
     // Enhanced product card interactions
@@ -179,6 +183,11 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             var form = this.closest('form');
             if (form && form.checkValidity()) {
+                // Clear any auto-refresh intervals during form submission
+                if (window.refreshInterval) {
+                    clearInterval(window.refreshInterval);
+                }
+                
                 var originalText = this.innerHTML;
                 this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
                 this.disabled = true;
