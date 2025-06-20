@@ -47,6 +47,12 @@ def quote_request(product_id):
     
     return render_template('quote_request.html', form=form, product=product)
 
+# Test route for debugging login
+@app.route('/test-login')
+def test_login():
+    with open('test_login.html', 'r') as f:
+        return f.read()
+
 # Admin routes
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
