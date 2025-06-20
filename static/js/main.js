@@ -173,14 +173,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Loading states for buttons
-    var submitButtons = document.querySelectorAll('button[type="submit"]');
+    // Loading states for buttons - but not for admin login
+    var submitButtons = document.querySelectorAll('button[type="submit"]:not(.admin-login-btn)');
     submitButtons.forEach(function(button) {
         button.addEventListener('click', function() {
             var form = this.closest('form');
             if (form && form.checkValidity()) {
+                var originalText = this.innerHTML;
                 this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
                 this.disabled = true;
+                
+                // Reset button after 10 seconds as fallback
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 10000);
             }
         });
     });
