@@ -116,25 +116,33 @@
                 <div class="card border-0 shadow">
                     <div class="card-body p-5">
                         <h3 class="fw-bold mb-4 text-center">Send Us a Message</h3>
-                        <form>
+                        
+                        {% if request.args.get('success') %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Thank you!</strong> Your message has been sent successfully. We'll get back to you within 24 hours.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endif %}
+                        <form action="https://formspree.io/f/xpznagwy" method="POST">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="name" required>
+                                    <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" required>
+                                    <input type="email" class="form-control" id="email" name="email" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone">
+                                    <input type="tel" class="form-control" id="phone" name="phone">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="subject" class="form-label">Subject</label>
-                                    <select class="form-select" id="subject">
+                                    <select class="form-select" id="subject" name="subject">
                                         <option value="">Select a topic...</option>
                                         <option value="quote">Request a Quote</option>
                                         <option value="technical">Technical Support</option>
@@ -145,8 +153,10 @@
                             </div>
                             <div class="mb-3">
                                 <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="5" placeholder="Tell us about your vehicle, performance goals, or any questions you have..." required></textarea>
+                                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us about your vehicle, performance goals, or any questions you have..." required></textarea>
                             </div>
+                            <input type="hidden" name="_next" value="{{ url_for('contact', _external=True) }}?success=1">
+                            <input type="hidden" name="_subject" value="New Contact Form Submission - OnyxForged">
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-lg px-5">Send Message</button>
                             </div>
