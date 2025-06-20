@@ -1,0 +1,43 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="chromeGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#e8e8e8;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#c0c0c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#888888;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="spokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a0a0a0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="600" fill="#f8f9fa"/>
+  
+  <!-- Outer tire -->
+  <circle cx="300" cy="300" r="280" fill="#1a1a1a" stroke="#333" stroke-width="2"/>
+  
+  <!-- Chrome rim -->
+  <circle cx="300" cy="300" r="200" fill="url(#chromeGradient)" stroke="#ddd" stroke-width="2"/>
+  
+  <!-- Luxury spoke design -->
+  <g transform="translate(300,300)">
+    <g fill="url(#spokeGradient)" stroke="#bbb" stroke-width="1">
+      <path d="M 0,-170 Q -30,-150 -50,-100 Q -30,-50 0,-30 Q 30,-50 50,-100 Q 30,-150 0,-170 Z"/>
+      <path d="M 120,-120 Q 100,-150 50,-170 Q 0,-150 -20,-120 Q 0,-90 50,-70 Q 100,-90 120,-120 Z"/>
+      <path d="M 170,0 Q 150,-30 100,-50 Q 50,-30 30,0 Q 50,30 100,50 Q 150,30 170,0 Z"/>
+      <path d="M 120,120 Q 100,150 50,170 Q 0,150 -20,120 Q 0,90 50,70 Q 100,90 120,120 Z"/>
+      <path d="M 0,170 Q -30,150 -50,100 Q -30,50 0,30 Q 30,50 50,100 Q 30,150 0,170 Z"/>
+      <path d="M -120,120 Q -100,150 -50,170 Q 0,150 20,120 Q 0,90 -50,70 Q -100,90 -120,120 Z"/>
+      <path d="M -170,0 Q -150,-30 -100,-50 Q -50,-30 -30,0 Q -50,30 -100,50 Q -150,30 -170,0 Z"/>
+      <path d="M -120,-120 Q -100,-150 -50,-170 Q 0,-150 20,-120 Q 0,-90 -50,-70 Q -100,-90 -120,-120 Z"/>
+    </g>
+  </g>
+  
+  <!-- Center cap -->
+  <circle cx="300" cy="300" r="40" fill="url(#chromeGradient)" stroke="#ccc" stroke-width="2"/>
+  
+  <!-- Luxury brand emblem -->
+  <circle cx="300" cy="300" r="25" fill="none" stroke="#999" stroke-width="1"/>
+  <text x="300" y="310" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="#666">LUXE</text>
+</svg>

@@ -140,8 +140,8 @@ def admin_add_product():
             try:
                 price_float = float(price)
                 if price_float > 0:
-                    # Handle file upload
-                    main_image_url = 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=600&fit=crop&crop=center'
+                    # Handle file upload - use local SVG image
+                    main_image_url = '/static/images/wheel-placeholder.svg'
                     
                     # Parse sizes and widths
                     sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]

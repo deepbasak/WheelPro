@@ -1,0 +1,49 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="wheelGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#4a4a4a;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#2a2a2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="rimGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#e0e0e0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a0a0a0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="600" height="600" fill="#f8f9fa"/>
+  
+  <!-- Outer tire -->
+  <circle cx="300" cy="300" r="280" fill="#1a1a1a" stroke="#333" stroke-width="2"/>
+  
+  <!-- Inner rim -->
+  <circle cx="300" cy="300" r="200" fill="url(#rimGradient)" stroke="#888" stroke-width="1"/>
+  
+  <!-- Spokes -->
+  <g transform="translate(300,300)">
+    <g stroke="#666" stroke-width="8" fill="none">
+      <line x1="0" y1="-150" x2="0" y2="150" />
+      <line x1="-106" y1="-106" x2="106" y2="106" />
+      <line x1="-150" y1="0" x2="150" y2="0" />
+      <line x1="-106" y1="106" x2="106" y2="-106" />
+    </g>
+  </g>
+  
+  <!-- Center cap -->
+  <circle cx="300" cy="300" r="40" fill="url(#wheelGradient)" stroke="#555" stroke-width="2"/>
+  
+  <!-- Bolt holes -->
+  <g fill="#333">
+    <circle cx="300" cy="200" r="8"/>
+    <circle cx="373" cy="250" r="8"/>
+    <circle cx="373" cy="350" r="8"/>
+    <circle cx="300" cy="400" r="8"/>
+    <circle cx="227" cy="350" r="8"/>
+    <circle cx="227" cy="250" r="8"/>
+  </g>
+  
+  <!-- Brand text -->
+  <text x="300" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#999">PREMIUM</text>
+  <text x="300" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#777">WHEEL RIM</text>
+</svg>
