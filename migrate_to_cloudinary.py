@@ -35,13 +35,19 @@ logger = logging.getLogger(__name__)
 
 def initialize_cloudinary():
     """Initialize Cloudinary with credentials from environment variables."""
-    cloudinary.config(
-        cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        api_key=os.environ.get('CLOUDINARY_API_KEY'),
-        api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-        secure=True
-    )
-    logger.info("Cloudinary initialized successfully")
+    if os.environ.get('CLOUDINARY_URL'):
+        # The Heroku Cloudinary add-on sets CLOUDINARY_URL
+        cloudinary.config(secure=True)
+        logger.info("Cloudinary initialized from CLOUDINARY_URL")
+    else:
+        # Use individual credentials
+        cloudinary.config(
+            cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+            api_key=os.environ.get('CLOUDINARY_API_KEY'),
+            api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+            secure=True
+        )
+        logger.info("Cloudinary initialized from individual credentials")
 
 def upload_to_cloudinary(local_path, public_id=None):
     """Upload a file to Cloudinary and return the URL."""
@@ -126,12 +132,13 @@ def migrate_product_images():
 
 if __name__ == "__main__":
     # Check if Cloudinary credentials are set
-    if not all([
-        os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        os.environ.get('CLOUDINARY_API_KEY'),
-        os.environ.get('CLOUDINARY_API_SECRET')
-    ]):
-        logger.error("Cloudinary environment variables are not set. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET.")
+    if not (os.environ.get('CLOUDINARY_URL') or 
+            all([
+                os.environ.get('CLOUDINARY_CLOUD_NAME'),
+                os.environ.get('CLOUDINARY_API_KEY'),
+                os.environ.get('CLOUDINARY_API_SECRET')
+            ])):
+        logger.error("Cloudinary environment variables are not set. Please set either CLOUDINARY_URL (from Heroku add-on) or the individual CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET variables.")
         sys.exit(1)
     
     # Initialize Cloudinary

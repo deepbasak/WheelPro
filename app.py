@@ -19,10 +19,11 @@ app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-for-premium-ri
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Initialize Cloudinary if environment variables are set
-if os.environ.get('CLOUDINARY_CLOUD_NAME'):
+if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
     from cloud_storage import initialize_cloudinary
     initialize_cloudinary()
     app.config['USE_CLOUDINARY'] = True
+    logging.info("Cloudinary initialized for file storage")
 else:
     app.config['USE_CLOUDINARY'] = False
     logging.warning("Cloudinary environment variables not set. File uploads will use local storage.")

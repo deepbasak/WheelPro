@@ -11,13 +11,20 @@ logger = logging.getLogger(__name__)
 def initialize_cloudinary():
     """Initialize Cloudinary with credentials from environment variables."""
     try:
-        cloudinary.config(
-            cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-            api_key=os.environ.get('CLOUDINARY_API_KEY'),
-            api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-            secure=True
-        )
-        logger.info("Cloudinary initialized successfully")
+        # Check for Heroku Cloudinary add-on URL format first
+        if os.environ.get('CLOUDINARY_URL'):
+            # The add-on sets CLOUDINARY_URL automatically
+            cloudinary.config(secure=True)
+            logger.info("Cloudinary initialized from CLOUDINARY_URL")
+        else:
+            # Fall back to individual credentials if not using the add-on
+            cloudinary.config(
+                cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+                api_key=os.environ.get('CLOUDINARY_API_KEY'),
+                api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+                secure=True
+            )
+            logger.info("Cloudinary initialized from individual credentials")
     except Exception as e:
         logger.error(f"Error initializing Cloudinary: {str(e)}")
         raise

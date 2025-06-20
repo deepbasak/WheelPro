@@ -119,6 +119,30 @@ After deployment, upload a test image and verify that it is being stored in Clou
 1. Checking the Cloudinary dashboard for the uploaded image
 2. Confirming that the image URL starts with your Cloudinary domain
 
+## Adding Cloudinary via Heroku Add-ons (Recommended)
+
+The easiest way to add Cloudinary to your Heroku app is through the Heroku add-ons marketplace:
+
+1. **Log in to Heroku Dashboard**: https://dashboard.heroku.com
+
+2. **Navigate to your app**: Select your app from the dashboard
+
+3. **Go to the Resources tab**: From your app's dashboard, click on "Resources" in the top navigation
+
+4. **Add Cloudinary Add-on**:
+   - In the "Add-ons" section, click on "Find more add-ons"
+   - Search for "Cloudinary" in the search box
+   - Select the Cloudinary add-on
+   - Choose a plan (the "Starter" plan is free and sufficient for most small applications)
+   - Click "Submit Order Form"
+
+5. **Verify Installation**:
+   - Once installed, Cloudinary will appear in your add-ons list
+   - The add-on automatically sets the `CLOUDINARY_URL` environment variable
+   - No need to manually configure the Cloudinary credentials!
+
+This method is preferred over manual configuration as it simplifies the setup process and provides direct access to your Cloudinary dashboard from Heroku.
+
 ## Local Testing of Production Configuration
 
 To test your application with production settings locally:
