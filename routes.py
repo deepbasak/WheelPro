@@ -51,7 +51,7 @@ def wheels():
                 
         if new_stock:
             try:
-                query = query.filter_by(is_new_stock=True)
+                query = query.filter_by(is_new_stock=1)
             except Exception:
                 # Column might not exist yet - skip this filter
                 pass
@@ -309,7 +309,7 @@ def admin_add_product():
             design_type = request.form.get('design_type', '').strip()
             vehicle_type = request.form.get('vehicle_type', '').strip()
             series = request.form.get('series', '').strip()
-            is_new_stock = bool(int(request.form.get('is_new_stock', '0')))
+            is_new_stock = int(request.form.get('is_new_stock', '0'))
             
             product = Product(
                 name=name,

@@ -19,7 +19,7 @@ class Product(db.Model):
     design_type: Mapped[str] = mapped_column(String(50), nullable=True)
     vehicle_type: Mapped[str] = mapped_column(String(50), nullable=True)
     series: Mapped[str] = mapped_column(String(50), nullable=True)
-    is_new_stock: Mapped[bool] = mapped_column(Integer, default=False)
+    is_new_stock: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class Quote(db.Model):
