@@ -4,13 +4,35 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section bg-light py-5">
+<section class="hero-section py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="display-4 fw-bold text-dark mb-4">OnyxForged Premium Wheel Rims</h1>
-                <p class="lead text-muted mb-4">Discover our exclusive collection of high-performance wheel rims designed for luxury and sport vehicles. Each wheel is crafted with precision and style at OnyxForged.</p>
-                <a href="#products" class="btn btn-primary btn-lg">Shop Now</a>
+        <div class="row align-items-center">
+            <div class="col-lg-7 col-md-8 mx-auto text-center">
+                <span class="badge rounded-pill bg-white text-accent mb-3 shadow-sm px-3 py-2"><i class="fas fa-star me-1"></i> Premium Quality Guaranteed</span>
+                <h1 class="display-4 fw-bold mb-4">OnyxForged Premium Wheel Rims</h1>
+                <p class="lead mb-5">Discover our exclusive collection of high-performance wheel rims designed for luxury and sport vehicles. Each wheel is crafted with precision and style at OnyxForged.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#products" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-cart me-2"></i>Shop Now
+                    </a>
+                    <a href="{{ url_for('contact') }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+                <div class="mt-5 pt-4 d-flex justify-content-center">
+                    <div class="d-flex align-items-center px-3">
+                        <i class="fas fa-truck text-accent me-2"></i>
+                        <span class="small fw-bold">Free Shipping</span>
+                    </div>
+                    <div class="border-start px-3 d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-accent me-2"></i>
+                        <span class="small fw-bold">2-Year Warranty</span>
+                    </div>
+                    <div class="border-start px-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle text-accent me-2"></i>
+                        <span class="small fw-bold">Premium Quality</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -20,9 +42,10 @@
 <section id="products" class="py-5">
     <div class="container">
         <div class="row mb-5">
-            <div class="col-12 text-center">
+            <div class="col-lg-7 col-md-9 mx-auto text-center">
+                <span class="badge bg-accent text-white px-3 py-2 mb-3">EXCLUSIVE COLLECTION</span>
                 <h2 class="display-5 fw-bold mb-3">Our Premium Collection</h2>
-                <p class="lead text-muted">Browse our carefully curated selection of wheel rims</p>
+                <p class="lead text-muted">Browse our carefully curated selection of wheel rims crafted for performance and style</p>
             </div>
         </div>
         
@@ -34,21 +57,36 @@
                     <div class="product-image-container">
                         <img src="{{ product.main_image }}" class="card-img-top product-image" alt="{{ product.name }}">
                         <div class="product-overlay">
-                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>View Details
+                            </a>
                         </div>
+                        <span class="badge bg-accent position-absolute top-0 end-0 m-3 py-2 px-3">New</span>
                     </div>
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title fw-bold">{{ product.name }}</h5>
                         <p class="card-text text-muted flex-grow-1">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
-                        <div class="product-specs mb-3">
-                            <small class="text-muted">
-                                <i class="fas fa-cog me-1"></i>Bolt Pattern: {{ product.bolt_pattern }}<br>
-                                <i class="fas fa-expand-arrows-alt me-1"></i>Sizes: {{ product.sizes|join(', ') }}
-                            </small>
+                        <div class="product-specs mb-3 p-3 bg-light-yellow rounded-3">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <small class="d-flex align-items-center">
+                                        <i class="fas fa-cog fa-fw text-accent me-2"></i>
+                                        <span>{{ product.bolt_pattern }}</span>
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="d-flex align-items-center">
+                                        <i class="fas fa-expand-arrows-alt fa-fw text-accent me-2"></i>
+                                        <span>{{ product.sizes|join(', ') }}</span>
+                                    </small>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h4 text-primary fw-bold mb-0">${{ "%.2f"|format(product.price) }}</span>
-                            <a href="{{ url_for('quote_request', product_id=product.id) }}" class="btn btn-outline-primary">Request Quote</a>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="h4 fw-bold mb-0 text-accent">${{ "%.2f"|format(product.price) }}</span>
+                            <a href="{{ url_for('quote_request', product_id=product.id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-file-invoice-dollar me-1"></i>Request Quote
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -71,32 +109,54 @@
 <section class="py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-12 text-center mb-5">
-                <h2 class="display-6 fw-bold">Why Choose PremiumRims?</h2>
+            <div class="col-lg-7 col-md-9 mx-auto text-center mb-5">
+                <span class="badge bg-white text-accent shadow-sm px-3 py-2 mb-3">WHY CHOOSE US</span>
+                <h2 class="display-6 fw-bold">The OnyxForged Advantage</h2>
+                <p class="lead mt-3">What makes our premium wheels stand out from the competition</p>
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-md-4 text-center">
-                <div class="feature-icon mb-3">
-                    <i class="fas fa-shield-alt fa-3x text-primary"></i>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift rounded-xl">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Quality Guarantee</h4>
+                        <p class="text-muted">All our wheels undergo rigorous testing to ensure the highest quality and safety standards that exceed industry requirements.</p>
+                        <a href="#" class="btn btn-sm btn-link text-accent mt-3">Learn more <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
                 </div>
-                <h4 class="fw-bold">Quality Guarantee</h4>
-                <p class="text-muted">All our wheels undergo rigorous testing to ensure the highest quality and safety standards.</p>
             </div>
-            <div class="col-md-4 text-center">
-                <div class="feature-icon mb-3">
-                    <i class="fas fa-shipping-fast fa-3x text-primary"></i>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift rounded-xl">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-shipping-fast fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Fast Delivery</h4>
+                        <p class="text-muted">Quick and secure shipping to get your new wheels to you as soon as possible with real-time tracking and delivery updates.</p>
+                        <a href="#" class="btn btn-sm btn-link text-accent mt-3">Learn more <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
                 </div>
-                <h4 class="fw-bold">Fast Delivery</h4>
-                <p class="text-muted">Quick and secure shipping to get your new wheels to you as soon as possible.</p>
             </div>
-            <div class="col-md-4 text-center">
-                <div class="feature-icon mb-3">
-                    <i class="fas fa-headset fa-3x text-primary"></i>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift rounded-xl">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-headset fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Expert Support</h4>
+                        <p class="text-muted">Our knowledgeable team is here to help you find the perfect wheels for your vehicle with personalized recommendations.</p>
+                        <a href="#" class="btn btn-sm btn-link text-accent mt-3">Learn more <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
                 </div>
-                <h4 class="fw-bold">Expert Support</h4>
-                <p class="text-muted">Our knowledgeable team is here to help you find the perfect wheels for your vehicle.</p>
             </div>
+        </div>
+        <div class="text-center mt-5 pt-3">
+            <a href="{{ url_for('about') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-info-circle me-2"></i>Learn More About OnyxForged
+            </a>
         </div>
     </div>
 </section>

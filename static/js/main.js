@@ -1,6 +1,24 @@
-// Premium Rim Store - JavaScript
+// OnyxForged - Modern Premium Wheel Store JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Add a class to body when page is fully loaded for fade-in animations
+    document.body.classList.add('page-loaded');
+
+    // Add animation classes to elements as they appear in viewport
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('visible');
+            }
+        });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll();
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -67,16 +85,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Removed auto-refresh functionality to prevent interruption of admin forms
 
-    // Enhanced product card interactions
+    // Enhanced product card and feature card interactions with staggered animations
     var productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(function(card) {
+    productCards.forEach(function(card, index) {
+        // Add animation classes with staggered delays
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 100 * (index + 1));
+        
+        // Mouse interactions
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
+            this.style.transform = 'translateY(-8px)';
         });
 
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
+    });
+    
+    // Feature card animations
+    var featureCards = document.querySelectorAll('.feature-icon');
+    featureCards.forEach(function(card, index) {
+        setTimeout(() => {
+            card.classList.add('animate-pulse');
+        }, 200 * (index + 1));
     });
 
     // File upload preview
@@ -176,6 +213,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Custom cursor effect for modern UI
+    const cursor = document.getElementById('cursor');
+    if (cursor) {
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // Change cursor size on hoverable elements
+        const hoverableElements = document.querySelectorAll('a, button, .btn, .card');
+        hoverableElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.borderColor = 'var(--accent-color)';
+                cursor.style.backgroundColor = 'rgba(255, 60, 48, 0.1)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.borderColor = 'var(--primary-color)';
+                cursor.style.backgroundColor = 'transparent';
+            });
+        });
+    }
 
     console.log('Premium Rim Store - JavaScript initialized successfully!');
 });
