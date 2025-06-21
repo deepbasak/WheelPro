@@ -117,7 +117,6 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Price</th>
                                     <th>Bolt Pattern</th>
                                     <th>Created</th>
                                     <th>Actions</th>
@@ -128,7 +127,6 @@
                                 <tr>
                                     <td>{{ product.id }}</td>
                                     <td>{{ product.name }}</td>
-                                    <td>${{ "%.2f"|format(product.price) }}</td>
                                     <td>{{ product.bolt_pattern }}</td>
                                     <td>{{ product.created_at.strftime('%Y-%m-%d') }}</td>
                                     <td>

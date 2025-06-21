@@ -138,83 +138,78 @@ def admin_add_product():
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         description = request.form.get('description', '').strip()
-        price = request.form.get('price', '0')
         bolt_pattern = request.form.get('bolt_pattern', '').strip()
         sizes_data = request.form.get('sizes', '').strip()
         widths_data = request.form.get('widths', '').strip()
         
+        # Set default price value (hidden from UI)
+        price_float = 0.01
+        
         # Validate required fields
-        if name and description and price and bolt_pattern:
-            try:
-                price_float = float(price)
-                if price_float > 0:
-                    # Handle file upload
-                    main_image_url = '/static/images/wheel-placeholder.svg'
+        if name and description and bolt_pattern:
+            # Handle file upload
+            main_image_url = '/static/images/wheel-placeholder.svg'
+            
+            # Handle multiple file uploads
+            uploaded_files = request.files.getlist('main_image')
+            additional_images = []
+            
+            if uploaded_files and uploaded_files[0].filename != '':
+                import time
+                
+                # Check if using Cloudinary or local storage
+                if app.config.get('USE_CLOUDINARY', False):
+                    from cloud_storage import upload_file
                     
-                    # Handle multiple file uploads
-                    uploaded_files = request.files.getlist('main_image')
-                    additional_images = []
-                    
-                    if uploaded_files and uploaded_files[0].filename != '':
-                        import time
-                        
-                        # Check if using Cloudinary or local storage
-                        if app.config.get('USE_CLOUDINARY', False):
-                            from cloud_storage import upload_file
+                    for i, file in enumerate(uploaded_files):
+                        if file and file.filename and file.filename != '' and allowed_file(file.filename):
+                            # Upload to Cloudinary
+                            folder = "wheelrpo/wheels"
+                            upload_result = upload_file(file, folder=folder)
                             
-                            for i, file in enumerate(uploaded_files):
-                                if file and file.filename and file.filename != '' and allowed_file(file.filename):
-                                    # Upload to Cloudinary
-                                    folder = "wheelrpo/wheels"
-                                    upload_result = upload_file(file, folder=folder)
-                                    
-                                    if upload_result and 'secure_url' in upload_result:
-                                        image_url = upload_result['secure_url']
-                                        
-                                        if i == 0:
-                                            main_image_url = image_url
-                                        else:
-                                            additional_images.append(image_url)
-                        else:
-                            # Fallback to local storage
-                            for i, file in enumerate(uploaded_files):
-                                if file and file.filename and file.filename != '' and allowed_file(file.filename):
-                                    filename = secure_filename(file.filename)
-                                    # Add timestamp to avoid conflicts
-                                    timestamp = str(int(time.time()))
-                                    filename = f"{timestamp}_{i}_{filename}"
-                                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                                    file.save(filepath)
-                                    image_url = f"/static/uploads/{filename}"
-                                    
-                                    if i == 0:
-                                        main_image_url = image_url
-                                    else:
-                                        additional_images.append(image_url)
-                    
-                    # Parse sizes and widths
-                    sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
-                    widths = [width.strip() for width in widths_data.split(',') if width.strip()]
-                    
-                    product = Product(
-                        name=name,
-                        description=description,
-                        price=price_float,
-                        main_image=main_image_url,
-                        additional_images=additional_images,
-                        bolt_pattern=bolt_pattern,
-                        sizes=sizes,
-                        widths=widths
-                    )
-                    
-                    db.session.add(product)
-                    db.session.commit()
-                    flash(f'Product "{product.name}" added successfully!', 'success')
-                    return redirect(url_for('admin_dashboard'))
+                            if upload_result and 'secure_url' in upload_result:
+                                image_url = upload_result['secure_url']
+                                
+                                if i == 0:
+                                    main_image_url = image_url
+                                else:
+                                    additional_images.append(image_url)
                 else:
-                    flash('Price must be greater than 0.', 'error')
-            except ValueError:
-                flash('Invalid price format.', 'error')
+                    # Fallback to local storage
+                    for i, file in enumerate(uploaded_files):
+                        if file and file.filename and file.filename != '' and allowed_file(file.filename):
+                            filename = secure_filename(file.filename)
+                            # Add timestamp to avoid conflicts
+                            timestamp = str(int(time.time()))
+                            filename = f"{timestamp}_{i}_{filename}"
+                            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                            file.save(filepath)
+                            image_url = f"/static/uploads/{filename}"
+                            
+                            if i == 0:
+                                main_image_url = image_url
+                            else:
+                                additional_images.append(image_url)
+            
+            # Parse sizes and widths
+            sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
+            widths = [width.strip() for width in widths_data.split(',') if width.strip()]
+            
+            product = Product(
+                name=name,
+                description=description,
+                price=price_float,
+                main_image=main_image_url,
+                additional_images=additional_images,
+                bolt_pattern=bolt_pattern,
+                sizes=sizes,
+                widths=widths
+            )
+            
+            db.session.add(product)
+            db.session.commit()
+            flash(f'Product "{product.name}" added successfully!', 'success')
+            return redirect(url_for('admin_dashboard'))
         else:
             flash('Please fill in all required fields.', 'error')
     

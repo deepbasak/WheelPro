@@ -29,7 +29,7 @@ class AdminLoginForm(FlaskForm):
 class ProductForm(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired(), Length(min=3, max=100)])
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=10, max=1000)])
-    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0.01)])
+    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0.01)], default=0.01)  # Hidden but required with minimal default value
     main_image = FileField('Main Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')])
     bolt_pattern = StringField('Bolt Pattern', validators=[DataRequired(), Length(min=3, max=20)])
     

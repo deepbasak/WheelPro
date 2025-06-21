@@ -200,6 +200,11 @@ body {
     opacity: 0.8;
 }
 
+/* Hide all price elements */
+.price-element {
+    display: none !important;
+}
+
 /* Product Detail */
 .product-detail-image img {
     max-height: 500px;
