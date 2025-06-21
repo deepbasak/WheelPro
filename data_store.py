@@ -44,8 +44,17 @@ def initialize_sample_data():
         admin.set_password('Takhar@Rim@0069')
         db.session.add(admin)
     
-    # Check if products exist
-    if Product.query.count() == 0:
+    # Check if products exist - safely handle missing columns
+    product_count = 0
+    try:
+        product_count = Product.query.count()
+    except Exception as e:
+        print(f"Error checking product count, possibly missing columns: {str(e)}")
+        # Tables might not be created yet or columns might be missing
+        # We'll create products anyway, and the migration script should fix the schema
+        product_count = 0
+    
+    if product_count == 0:
         sample_products = [
             {
                 'name': 'Forged Aluminum Racing Wheel',

@@ -23,30 +23,78 @@ def wheels():
     series = request.args.get('series')
     new_stock = request.args.get('new_stock')
     
-    # Build the query
-    query = Product.query
-    
-    # Apply filters
-    if design_type:
-        query = query.filter_by(design_type=design_type)
-    if vehicle_type:
-        query = query.filter_by(vehicle_type=vehicle_type)
-    if series:
-        query = query.filter_by(series=series)
-    if new_stock:
-        query = query.filter_by(is_new_stock=True)
-    
-    # Get products
-    products = query.all()
-    
-    # Get all unique filter values from the database for dropdowns
-    all_products = Product.query.all()
-    design_types = sorted(set(p.design_type for p in all_products if p.design_type))
-    vehicle_types = sorted(set(p.vehicle_type for p in all_products if p.vehicle_type))
-    series_list = sorted(set(p.series for p in all_products if p.series))
-    
-    # Import filter constants for new entries
-    from data_store import DESIGN_TYPES, VEHICLE_TYPES, WHEEL_SERIES
+    try:
+        # Build the query
+        query = Product.query
+        
+        # Apply filters - with try/except to handle case where columns might not exist
+        if design_type:
+            try:
+                query = query.filter_by(design_type=design_type)
+            except Exception:
+                # Column might not exist yet - skip this filter
+                pass
+                
+        if vehicle_type:
+            try:
+                query = query.filter_by(vehicle_type=vehicle_type)
+            except Exception:
+                # Column might not exist yet - skip this filter
+                pass
+                
+        if series:
+            try:
+                query = query.filter_by(series=series)
+            except Exception:
+                # Column might not exist yet - skip this filter
+                pass
+                
+        if new_stock:
+            try:
+                query = query.filter_by(is_new_stock=True)
+            except Exception:
+                # Column might not exist yet - skip this filter
+                pass
+        
+        # Get products
+        products = query.all()
+        
+        # Get all unique filter values from the database for dropdowns
+        all_products = Product.query.all()
+        
+        # Try to get filter values from products, handle case where columns don't exist
+        try:
+            design_types = sorted(set(p.design_type for p in all_products if p.design_type))
+        except Exception:
+            design_types = []
+            
+        try:
+            vehicle_types = sorted(set(p.vehicle_type for p in all_products if p.vehicle_type))
+        except Exception:
+            vehicle_types = []
+            
+        try:
+            series_list = sorted(set(p.series for p in all_products if p.series))
+        except Exception:
+            series_list = []
+        
+        # Import filter constants for new entries
+        from data_store import DESIGN_TYPES, VEHICLE_TYPES, WHEEL_SERIES
+        
+        # If we couldn't get values from products, use the constants
+        if not design_types:
+            design_types = DESIGN_TYPES
+        if not vehicle_types:
+            vehicle_types = VEHICLE_TYPES
+        if not series_list:
+            series_list = WHEEL_SERIES
+    except Exception as e:
+        # In case of any database error, show a message and return empty results
+        flash(f"Database error: {str(e)}. Please run the migration script.", "error")
+        products = []
+        design_types = DESIGN_TYPES
+        vehicle_types = VEHICLE_TYPES
+        series_list = WHEEL_SERIES
     
     return render_template('wheels.html', 
                           products=products, 

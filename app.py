@@ -56,10 +56,15 @@ from models import *
 from routes import *
 
 with app.app_context():
-    db.create_all()
-    # Initialize sample data if no products exist
-    from data_store import initialize_sample_data
-    initialize_sample_data()
+    try:
+        db.create_all()
+        # Initialize sample data if no products exist
+        from data_store import initialize_sample_data
+        initialize_sample_data()
+    except Exception as e:
+        logging.error(f"Error during database initialization: {str(e)}")
+        logging.error("If this is due to missing columns, please run the migrate_db.py script")
+        # Don't terminate the app, continue loading it and let the user handle the migration
 
 if __name__ == '__main__':
     # Ensure upload directory exists
