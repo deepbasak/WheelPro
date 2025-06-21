@@ -146,6 +146,43 @@
                                 {% endif %}
                             </div>
                         </div>
+
+                        <!-- Wheel Preferences -->
+                        <div class="section-header mb-4">
+                            <h5 class="fw-bold text-primary">
+                                <i class="fas fa-cog me-2"></i>Wheel Preferences
+                            </h5>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="{{ form.design_type.id }}" class="form-label">{{ form.design_type.label.text }}</label>
+                                {{ form.design_type(class="form-select" + (" is-invalid" if form.design_type.errors else "")) }}
+                                {% if form.design_type.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.design_type.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.vehicle_type.id }}" class="form-label">{{ form.vehicle_type.label.text }}</label>
+                                {{ form.vehicle_type(class="form-select" + (" is-invalid" if form.vehicle_type.errors else "")) }}
+                                {% if form.vehicle_type.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.vehicle_type.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.series.id }}" class="form-label">{{ form.series.label.text }}</label>
+                                {{ form.series(class="form-select" + (" is-invalid" if form.series.errors else "")) }}
+                                {% if form.series.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.series.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
                         
                         <!-- Additional Information -->
                         <div class="section-header mb-4">

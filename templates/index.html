@@ -12,8 +12,11 @@
                 <h1 class="display-4 fw-bold mb-4">OnyxForged Premium Wheel Rims</h1>
                 <p class="lead mb-5">Discover our exclusive collection of high-performance wheel rims designed for luxury and sport vehicles. Each wheel is crafted with precision and style at OnyxForged.</p>
                 <div class="d-flex justify-content-center gap-3">
-                    <a href="#products" class="btn btn-primary btn-lg">
-                        <i class="fas fa-shopping-cart me-2"></i>Shop Now
+                    <a href="{{ url_for('wheels') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-cart me-2"></i>Browse Wheels
+                    </a>
+                    <a href="#products" class="btn btn-yellow btn-lg">
+                        <i class="fas fa-gem me-2"></i>Featured Collection
                     </a>
                     <a href="{{ url_for('contact') }}" class="btn btn-outline-primary btn-lg">
                         <i class="fas fa-envelope me-2"></i>Contact Us
@@ -91,6 +94,19 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="row mt-5 pt-4">
+            <div class="col-12 text-center">
+                <div class="card bg-accent shadow border-0 text-white p-4">
+                    <div class="card-body">
+                        <h3 class="fw-bold mb-3">Browse Our Full Collection</h3>
+                        <p class="mb-4">Explore our complete wheel catalog with filtering options by design type, vehicle type, and series</p>
+                        <a href="{{ url_for('wheels') }}" class="btn btn-lg btn-light">
+                            <i class="fas fa-th-large me-2"></i>View All Wheels
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
         {% else %}
         <div class="row">

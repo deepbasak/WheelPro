@@ -74,6 +74,49 @@
                             </h6>
                         </div>
                         
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label for="{{ form.design_type.id }}" class="form-label">{{ form.design_type.label.text }}</label>
+                                {{ form.design_type(class="form-select" + (" is-invalid" if form.design_type.errors else "")) }}
+                                {% if form.design_type.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.design_type.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="{{ form.vehicle_type.id }}" class="form-label">{{ form.vehicle_type.label.text }}</label>
+                                {{ form.vehicle_type(class="form-select" + (" is-invalid" if form.vehicle_type.errors else "")) }}
+                                {% if form.vehicle_type.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.vehicle_type.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="{{ form.series.id }}" class="form-label">{{ form.series.label.text }}</label>
+                                {{ form.series(class="form-select" + (" is-invalid" if form.series.errors else "")) }}
+                                {% if form.series.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.series.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.is_new_stock.id }}" class="form-label">{{ form.is_new_stock.label.text }}</label>
+                            {{ form.is_new_stock(class="form-select" + (" is-invalid" if form.is_new_stock.errors else "")) }}
+                            {% if form.is_new_stock.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.is_new_stock.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Mark this wheel as new stock to feature it in the New Arrivals section</div>
+                        </div>
+                        
                         <div class="mb-3">
                             <label for="{{ form.bolt_pattern.id }}" class="form-label">{{ form.bolt_pattern.label.text }}</label>
                             {{ form.bolt_pattern(class="form-control" + (" is-invalid" if form.bolt_pattern.errors else ""), placeholder="e.g., 5x114.3, 5x120, 6x139.7") }}

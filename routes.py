@@ -14,6 +14,50 @@ def index():
     products = Product.query.all()
     return render_template('index.html', products=products)
 
+@app.route('/wheels')
+def wheels():
+    """Store page with filtering capabilities"""
+    # Get filter parameters from request
+    design_type = request.args.get('design_type')
+    vehicle_type = request.args.get('vehicle_type')
+    series = request.args.get('series')
+    new_stock = request.args.get('new_stock')
+    
+    # Build the query
+    query = Product.query
+    
+    # Apply filters
+    if design_type:
+        query = query.filter_by(design_type=design_type)
+    if vehicle_type:
+        query = query.filter_by(vehicle_type=vehicle_type)
+    if series:
+        query = query.filter_by(series=series)
+    if new_stock:
+        query = query.filter_by(is_new_stock=True)
+    
+    # Get products
+    products = query.all()
+    
+    # Get all unique filter values from the database for dropdowns
+    all_products = Product.query.all()
+    design_types = sorted(set(p.design_type for p in all_products if p.design_type))
+    vehicle_types = sorted(set(p.vehicle_type for p in all_products if p.vehicle_type))
+    series_list = sorted(set(p.series for p in all_products if p.series))
+    
+    # Import filter constants for new entries
+    from data_store import DESIGN_TYPES, VEHICLE_TYPES, WHEEL_SERIES
+    
+    return render_template('wheels.html', 
+                          products=products, 
+                          design_types=DESIGN_TYPES, 
+                          vehicle_types=VEHICLE_TYPES, 
+                          series_list=WHEEL_SERIES,
+                          selected_design=design_type,
+                          selected_vehicle=vehicle_type,
+                          selected_series=series,
+                          new_stock=new_stock)
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -32,6 +76,15 @@ def quote_request(product_id):
     product = Product.query.get_or_404(product_id)
     form = QuoteRequestForm()
     
+    # Pre-populate wheel preference fields if product has those attributes
+    if product.design_type:
+        form.design_type.default = product.design_type
+    if product.vehicle_type:
+        form.vehicle_type.default = product.vehicle_type
+    if product.series:
+        form.series.default = product.series
+    form.process()  # Process the form to apply the defaults
+    
     if request.method == 'POST':
         # Get form data directly from request
         first_name = request.form.get('first_name', '').strip()
@@ -44,13 +97,22 @@ def quote_request(product_id):
         vehicle_make = request.form.get('vehicle_make', '').strip()
         vehicle_year = request.form.get('vehicle_year', '').strip()
         vehicle_model = request.form.get('vehicle_model', '').strip()
+        design_type = request.form.get('design_type', '').strip()
+        vehicle_type = request.form.get('vehicle_type', '').strip()
+        series = request.form.get('series', '').strip()
         remarks = request.form.get('remarks', '').strip()
         
         # Basic validation
-        if first_name and last_name and email and phone and city and state and country and vehicle_make and vehicle_year and vehicle_model:
+        if first_name and last_name and email and phone and city and state and country and vehicle_make and vehicle_year and vehicle_model and design_type and vehicle_type and series:
             try:
                 year_int = int(vehicle_year)
                 if 1900 <= year_int <= 2030:
+                    # Store wheel preference info in remarks field for now
+                    # In the future, you might want to add these fields to the Quote model
+                    full_remarks = f"Design Type: {design_type}\nVehicle Type: {vehicle_type}\nWheel Series: {series}\n\n"
+                    if remarks:
+                        full_remarks += remarks
+                    
                     quote = Quote(
                         first_name=first_name,
                         last_name=last_name,
@@ -62,7 +124,7 @@ def quote_request(product_id):
                         vehicle_make=vehicle_make,
                         vehicle_year=year_int,
                         vehicle_model=vehicle_model,
-                        remarks=remarks,
+                        remarks=full_remarks,
                         product_id=product_id
                     )
                     
@@ -195,6 +257,12 @@ def admin_add_product():
             sizes = [size.strip() for size in sizes_data.split(',') if size.strip()]
             widths = [width.strip() for width in widths_data.split(',') if width.strip()]
             
+            # Get new fields
+            design_type = request.form.get('design_type', '').strip()
+            vehicle_type = request.form.get('vehicle_type', '').strip()
+            series = request.form.get('series', '').strip()
+            is_new_stock = bool(int(request.form.get('is_new_stock', '0')))
+            
             product = Product(
                 name=name,
                 description=description,
@@ -203,7 +271,11 @@ def admin_add_product():
                 additional_images=additional_images,
                 bolt_pattern=bolt_pattern,
                 sizes=sizes,
-                widths=widths
+                widths=widths,
+                design_type=design_type,
+                vehicle_type=vehicle_type,
+                series=series,
+                is_new_stock=is_new_stock
             )
             
             db.session.add(product)

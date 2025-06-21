@@ -12,6 +12,23 @@ VEHICLE_MAKES = [
 
 VEHICLE_YEARS = list(range(1990, 2026))  # 1990 to 2025
 
+# Wheel design types
+DESIGN_TYPES = [
+    'Mesh', 'Full Face', '5 Spoke', 'Split 5', '6 Spoke', 
+    '7 Spoke', '8 Spoke', 'Directional', 'Multi Spoke', 'Concave'
+]
+
+# Vehicle types
+VEHICLE_TYPES = [
+    'Exotic', 'Dually', 'Truck', 'Electric', 'Muscle Car', 'Luxury'
+]
+
+# Wheel series
+WHEEL_SERIES = [
+    'Classic Series', 'Sport Series', 'Racing Series', 'Luxury Series', 
+    'Off-Road Series', 'Performance Series', 'Limited Edition'
+]
+
 def initialize_sample_data():
     """Initialize sample data if database is empty"""
     # Check if admin exists

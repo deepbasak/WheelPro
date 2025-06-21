@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}OnyxForged - Premium Wheel Collection{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 mx-auto text-center">
+                <span class="badge rounded-pill bg-white text-accent mb-3 shadow-sm px-3 py-2"><i class="fas fa-star me-1"></i> Premium Collection</span>
+                <h1 class="display-4 fw-bold mb-3">Our Wheel Collection</h1>
+                <p class="lead mb-0">Browse our complete collection of premium wheel rims designed for luxury and performance vehicles</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-4 bg-light-yellow">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="fas fa-filter me-2 text-accent"></i>Filter Collection</h5>
+                        <form action="{{ url_for('wheels') }}" method="GET" id="filterForm">
+                            <div class="row g-3">
+                                <!-- Design Type Filter -->
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="form-label fw-bold">Design Type</label>
+                                    <select name="design_type" class="form-select filter-select" onchange="this.form.submit()">
+                                        <option value="">All Designs</option>
+                                        {% for design in design_types %}
+                                        <option value="{{ design }}" {% if selected_design == design %}selected{% endif %}>{{ design }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Vehicle Type Filter -->
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="form-label fw-bold">Vehicle Type</label>
+                                    <select name="vehicle_type" class="form-select filter-select" onchange="this.form.submit()">
+                                        <option value="">All Vehicles</option>
+                                        {% for vehicle in vehicle_types %}
+                                        <option value="{{ vehicle }}" {% if selected_vehicle == vehicle %}selected{% endif %}>{{ vehicle }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Series Filter -->
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="form-label fw-bold">Wheel Series</label>
+                                    <select name="series" class="form-select filter-select" onchange="this.form.submit()">
+                                        <option value="">All Series</option>
+                                        {% for s in series_list %}
+                                        <option value="{{ s }}" {% if selected_series == s %}selected{% endif %}>{{ s }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- New Stock Filter -->
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="form-label fw-bold">Stock</label>
+                                    <div class="d-flex mt-2">
+                                        <div class="form-check me-3">
+                                            <input class="form-check-input" type="checkbox" id="newStockCheck" name="new_stock" value="1" 
+                                                   {% if new_stock %}checked{% endif %} onchange="this.form.submit()">
+                                            <label class="form-check-label" for="newStockCheck">
+                                                New Arrivals
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Clear Filters Button -->
+                                <div class="col-12 mt-3 text-end">
+                                    <a href="{{ url_for('wheels') }}" class="btn btn-sm btn-outline-secondary">Clear Filters</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <h2 class="fw-bold mb-0">{{ products|length }} Products Found</h2>
+            </div>
+        </div>
+
+        {% if products %}
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card product-card h-100 shadow-sm border-0">
+                    <div class="product-image-container">
+                        <img src="{{ product.main_image }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        <div class="product-overlay">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>View Details
+                            </a>
+                        </div>
+                        {% if product.is_new_stock %}
+                        <span class="badge bg-accent position-absolute top-0 end-0 m-3 py-2 px-3">New</span>
+                        {% endif %}
+                        
+                        {% if product.design_type %}
+                        <span class="badge bg-primary position-absolute top-0 start-0 m-3 py-2 px-3">{{ product.design_type }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">{{ product.name }}</h5>
+                        <p class="card-text text-muted flex-grow-1">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
+                        
+                        <div class="product-specs mb-3 p-3 bg-light-yellow rounded-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-cog fa-fw text-accent me-2"></i>
+                                        <span>{{ product.bolt_pattern }}</span>
+                                    </small>
+                                    <small class="d-flex align-items-center">
+                                        <i class="fas fa-expand-arrows-alt fa-fw text-accent me-2"></i>
+                                        <span>{{ product.sizes|join(', ') }}</span>
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-car fa-fw text-accent me-2"></i>
+                                        <span>{{ product.vehicle_type or 'Universal' }}</span>
+                                    </small>
+                                    <small class="d-flex align-items-center">
+                                        <i class="fas fa-tag fa-fw text-accent me-2"></i>
+                                        <span>{{ product.series or 'Standard' }}</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-center align-items-center mt-2">
+                            <a href="{{ url_for('quote_request', product_id=product.id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-file-invoice-dollar me-1"></i>Request Quote
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-tire fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">No products found matching your filters</h3>
+                <p class="text-muted">Please try different filter options or <a href="{{ url_for('wheels') }}">view all products</a>.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if products %}
+<!-- Call to Action -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-4">Can't find what you're looking for?</h2>
+                <p class="lead mb-4">Our team of experts can help you find the perfect wheel solution for your vehicle.</p>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to product cards
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach((card, index) => {
+            card.classList.add('animate-on-scroll');
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+        
+        setTimeout(() => {
+            productCards.forEach(card => {
+                card.classList.add('visible');
+            });
+        }, 300);
+    });
+</script>
+{% endblock %}

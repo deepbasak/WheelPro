@@ -16,6 +16,10 @@ class Product(db.Model):
     widths: Mapped[list] = mapped_column(JSON, nullable=False)
     main_image: Mapped[str] = mapped_column(String(500), nullable=False)
     additional_images: Mapped[list] = mapped_column(JSON, default=lambda: [])
+    design_type: Mapped[str] = mapped_column(String(50), nullable=True)
+    vehicle_type: Mapped[str] = mapped_column(String(50), nullable=True)
+    series: Mapped[str] = mapped_column(String(50), nullable=True)
+    is_new_stock: Mapped[bool] = mapped_column(Integer, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 class Quote(db.Model):
